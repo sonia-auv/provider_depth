@@ -25,6 +25,8 @@
 
 #include "provider_depth_node.h"
 
+#define BUFFER_SIZE 4096
+
 namespace provider_depth
 {
 
@@ -32,7 +34,7 @@ namespace provider_depth
     ProviderDepthNode::ProviderDepthNode(const ros::NodeHandlePtr &_nh)
         : nh_(_nh), configuration_(_nh), serialConnection_(configuration_.getTtyPort())
     {
-
+        readThread = std::thread(std::bind(&ProviderDepthNode::readSerialDevice, this));
     }
 
     ProviderDepthNode::~ProviderDepthNode()
@@ -48,6 +50,36 @@ namespace provider_depth
         {
             ros::spinOnce();
             r.sleep();
+        }
+    }
+
+    void ProviderDepthNode::readSerialDevice()
+    {
+        ros::Rate r(100);
+        char buffer[BUFFER_SIZE];
+        ROS_INFO_STREAM("Serial Read Thread is started");
+
+        while(!ros::isShuttingDown())
+        {
+            // find the message beginning
+            do
+            {
+                serialConnection_.readOnce(buffer, 0);
+            }while(buffer[0] != '$');
+
+            int i;
+
+            for(i = 1; buffer[i-1] != '\n' && i < BUFFER_SIZE; i++)
+            {
+                serialConnection_.readOnce(buffer, i);
+            }
+
+            if(i >= BUFFER_SIZE)
+            {
+                continue;
+            }
+
+            buffer[i] = 0;          
         }
     }
 }

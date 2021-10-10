@@ -3,6 +3,6 @@
     <!-- load the provider -->
     <node name="provider_depth" pkg="provider_depth" type="provider_depth_node" output="screen"/>
 
-    <rosparam command="load" file="$(find provider_depth)/config/$(env AUV).yaml"/>
+    <rosparam command="load" file="$(find provider_depth)/config/isd4000.yaml"/>
 
 </launch>

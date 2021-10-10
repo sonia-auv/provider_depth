@@ -47,9 +47,13 @@ class ProviderDepthNode
 
     private:
 
+        void readSerialDevice();
+
         ros::NodeHandlePtr nh_;
         Configuration configuration_;
         Serial serialConnection_;
+
+        std::thread readThread;
 };
 
 }

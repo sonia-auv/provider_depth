@@ -1,7 +1,0 @@
-#********** Driver Parameters ************
-
-/provider_depth/connection/tty_port: "/dev/ttyUSB0"
-
-/provider_depth/settings/role : "master"
-
-/provider_depth/settings/channel : "4"
