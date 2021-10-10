@@ -35,6 +35,8 @@ namespace provider_depth
         : nh_(_nh), configuration_(_nh), serialConnection_(configuration_.getTtyPort())
     {
         readThread = std::thread(std::bind(&ProviderDepthNode::readSerialDevice, this));
+
+        serialConnection_.flush();
     }
 
     ProviderDepthNode::~ProviderDepthNode()
@@ -44,7 +46,7 @@ namespace provider_depth
 
     void ProviderDepthNode::Spin()
     {
-        ros::Rate r(50); // 50 Hz
+        ros::Rate r(100); // 100 Hz
 
         while(ros::ok())
         {
@@ -79,7 +81,16 @@ namespace provider_depth
                 continue;
             }
 
-            buffer[i] = 0;          
+            buffer[i] = 0;
+
+            if(!strncmp(&buffer[1], ID1, 5))
+            {
+                std::unique_lock<std::mutex> mlock(id1_mutex);
+                id1_string = std::string(buffer);
+                id1_cond.notify_one();
+            }
+
+            r.sleep();
         }
     }
 }

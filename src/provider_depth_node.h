@@ -30,9 +30,12 @@
 #include <thread>
 #include <mutex>
 #include <condition_variable>
+#include <string>
 
 #include "Configuration.h"
 #include "drivers/serial.h"
+
+#define ID1 "ISDPT"
 
 namespace provider_depth {
 
@@ -53,7 +56,11 @@ class ProviderDepthNode
         Configuration configuration_;
         Serial serialConnection_;
 
+        std::string id1_string;
+
         std::thread readThread;
+        std::mutex id1_mutex;
+        std::condition_variable id1_cond;
 };
 
 }
