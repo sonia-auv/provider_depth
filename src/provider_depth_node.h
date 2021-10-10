@@ -1,7 +1,7 @@
 /**
- * \file	main.cc
- * \author	Francois Côté-Raiche <francois.cote-raiche.1@ens.etsmtl.ca>
- * \date	05/10/2021
+ * \file	provider_depth_node.h
+ * \author	Francis Alonzo
+ * \date	24/07/2017
  * 
  * \copyright Copyright (c) 2021 S.O.N.I.A. All rights reserved.
  *
@@ -23,15 +23,35 @@
  * along with S.O.N.I.A. software. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef PROVIDER_DEPTH_NODE
+#define PROVIDER_DEPTH_NODE
+
 #include <ros/ros.h>
-#include "provider_depth_node.h"
+#include <thread>
+#include <mutex>
+#include <condition_variable>
 
-int main(int argc, char **argv)
+#include "Configuration.h"
+#include "drivers/serial.h"
+
+namespace provider_depth {
+
+class ProviderDepthNode
 {
-    ros::init(argc, argv, "provider_depth");
-    ros::NodeHandlePtr nh(new ros::NodeHandle("~"));
-    provider_depth::ProviderDepthNode provider_depth_node{nh};
-    provider_depth_node.Spin();
+    public:
 
-    return 0;
+        ProviderDepthNode(const ros::NodeHandlePtr &_nh);
+        ~ProviderDepthNode();
+
+        void Spin();
+
+    private:
+
+        ros::NodeHandlePtr nh_;
+        Configuration configuration_;
+        Serial serialConnection_;
+};
+
 }
+
+#endif //PROVIDER_DEPTH_NODE

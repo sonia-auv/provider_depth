@@ -25,7 +25,7 @@
 # G L O B A L   P R O J E C T   C O N F I G U R A T I O N
 
 cmake_minimum_required(VERSION 2.8.3)
-project(provider_underwater_com)
+project(provider_depth)
 
 if (NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Debug CACHE STRING
@@ -36,7 +36,7 @@ endif (NOT CMAKE_BUILD_TYPE)
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -std=c++11 -Wall")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -std=c++11 -O3 -s")
 
-set(provider_underwater_com_SRC_DIR "src")
+set(provider_depth_SRC_DIR "src")
 
 #===============================================================================
 # C A T K I N   C O N F I G U R A T I O N
@@ -58,7 +58,7 @@ if (NOT LOG4CXX_LIBRARY)
 endif ()
 
 catkin_package(
-    INCLUDE_DIRS ${provider_underwater_com_SRC_DIR}
+    INCLUDE_DIRS ${provider_depth_SRC_DIR}
     LIBRARIES
     CATKIN_DEPENDS
     roscpp
@@ -74,18 +74,18 @@ catkin_package(
 #===============================================================================
 # I N C L U D E   F I L E S
 
-file(GLOB_RECURSE provider_underwater_com_FILES "${provider_underwater_com_SRC_DIR}/*.cc" "${provider_underwater_com_SRC_DIR}/*.h")
+file(GLOB_RECURSE provider_depth_FILES "${provider_depth_SRC_DIR}/*.cc" "${provider_depth_SRC_DIR}/*.h")
 
 include_directories(
     ${catkin_INCLUDE_DIRS}
-    ${provider_underwater_com_SRC_DIR}
+    ${provider_depth_SRC_DIR}
     ${sonia_common_INCLUDE_DIRS}
 )
 
 #==========================================================================
 # C R E A T E   E X E C U T A B L E
 
-add_executable(${PROJECT_NAME}_node ${provider_underwater_com_FILES})
+add_executable(${PROJECT_NAME}_node ${provider_depth_FILES})
 target_link_libraries(${PROJECT_NAME}_node ${catkin_LIBRARIES} ${sonia_common_LIBRARIES})
 add_dependencies(${PROJECT_NAME}_node sonia_common_generate_messages_cpp)
 
