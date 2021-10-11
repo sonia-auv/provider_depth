@@ -34,14 +34,17 @@ namespace provider_depth
     ProviderDepthNode::ProviderDepthNode(const ros::NodeHandlePtr &_nh)
         : nh_(_nh), configuration_(_nh), serialConnection_(configuration_.getTtyPort())
     {
+        depthPublisher_ = nh_->advertise<std_msgs::Float32>("/provider_depth/depth", 100);
+        
         readThread = std::thread(std::bind(&ProviderDepthNode::readSerialDevice, this));
+        sendID1Thread = std::thread(std::bind(&ProviderDepthNode::sendId1Register, this));
 
         serialConnection_.flush();
     }
 
     ProviderDepthNode::~ProviderDepthNode()
     {
-
+        readThread.~thread();
     }
 
     void ProviderDepthNode::Spin()
@@ -83,7 +86,7 @@ namespace provider_depth
 
             buffer[i] = 0;
 
-            if(!strncmp(&buffer[1], ID1, 5))
+            if(!strncmp(&buffer[1], ID1, 5)) // Add checksum verification
             {
                 std::unique_lock<std::mutex> mlock(id1_mutex);
                 id1_string = std::string(buffer);
@@ -91,6 +94,40 @@ namespace provider_depth
             }
 
             r.sleep();
+        }
+    }
+
+    void ProviderDepthNode::sendId1Register()
+    {
+        ROS_INFO_STREAM("Send ID1 Thread started");
+
+        while(!ros::isShuttingDown())
+        {
+            std::string tmp = "";
+
+            std::unique_lock<std::mutex> mlock(id1_mutex);
+            id1_cond.wait(mlock);
+
+            try
+            {
+                if(id1_string.empty()) // Add checksum verification
+                {
+                    std::stringstream ss(id1_string);
+
+                    std::getline(ss, tmp, ','); // Get the header of the message
+
+                    std::getline(ss, tmp, ','); // Get the depth
+                    depth_.data = stof(tmp);
+                    depthPublisher_.publish(depth_);
+
+                    // Add other values returned from the sensor
+                }
+            }
+            catch(...)
+            {
+                ROS_ERROR_STREAM("Issue with the message received from depth sensor");
+            }
+            
         }
     }
 }

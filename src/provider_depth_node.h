@@ -31,6 +31,7 @@
 #include <mutex>
 #include <condition_variable>
 #include <string>
+#include <std_msgs/Float32.h>
 
 #include "Configuration.h"
 #include "drivers/serial.h"
@@ -51,16 +52,21 @@ class ProviderDepthNode
     private:
 
         void readSerialDevice();
+        void sendId1Register();
 
         ros::NodeHandlePtr nh_;
         Configuration configuration_;
         Serial serialConnection_;
 
-        std::string id1_string;
+        ros::Publisher depthPublisher_;
 
         std::thread readThread;
+        std::thread sendID1Thread;
         std::mutex id1_mutex;
+        std::string id1_string = "";
         std::condition_variable id1_cond;
+
+        std_msgs::Float32 depth_;
 };
 
 }
