@@ -60,7 +60,7 @@ namespace provider_depth
 
     void ProviderDepthNode::readSerialDevice()
     {
-        ros::Rate r(100);
+        ros::Rate r(100); // 100 Hz
         char buffer[BUFFER_SIZE];
         ROS_INFO_STREAM("Serial Read Thread is started");
 
