@@ -110,7 +110,7 @@ namespace provider_depth
 
             try
             {
-                if(id1_string.empty()) // Add checksum verification
+                if(!id1_string.empty()) // Add checksum verification
                 {
                     std::stringstream ss(id1_string);
 
