@@ -120,7 +120,24 @@ namespace provider_depth
                     depth_.data = stof(tmp);
                     depthPublisher_.publish(depth_);
 
-                    // Add other values returned from the sensor
+
+                    std::getline(ss, tmp, ','); // M
+
+                    std::getline(ss, tmp, ','); // Get the pressure
+
+                    depth_.data = stof(tmp);
+
+                    depthPublisher_.publish(depth_);
+
+
+
+                    std::getline(ss, tmp, ','); // B
+
+                    std::getline(ss, tmp, ','); // Get the temperature
+
+                    depth_.data = stof(tmp);
+
+                    depthPublisher_.publish(depth_);
                 }
             }
             catch(...)
