@@ -99,12 +99,13 @@ namespace provider_depth
 
     void ProviderDepthNode::sendId1Register()
     {
+        std::string tmp = "";
+        
         ROS_INFO_STREAM("Send ID1 Thread started");
 
         while(!ros::isShuttingDown())
         {
-            std::string tmp = "";
-
+            tmp = "";
             std::unique_lock<std::mutex> mlock(id1_mutex);
             id1_cond.wait(mlock);
 
