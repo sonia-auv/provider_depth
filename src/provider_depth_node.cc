@@ -127,16 +127,16 @@ namespace provider_depth
                     std::getline(ss, tmp, ','); // M
 
                     std::getline(ss, tmp, ','); // Get the pressure
-                    depth_.data = stof(tmp);
-                    depthPublisher_.publish(press_);
+                    press_.data = stof(tmp);
+                    pressPublisher_.publish(press_);
 
 
 
                     std::getline(ss, tmp, ','); // B
 
                     std::getline(ss, tmp, ','); // Get the temperature
-                    depth_.data = stof(tmp);
-                    depthPublisher_.publish(temp_);
+                    temp_.data = stof(tmp);
+                    tempPublisher_.publish(temp_);
                 }
             }
             catch(...)
