@@ -59,6 +59,8 @@ class ProviderDepthNode
         Serial serialConnection_;
 
         ros::Publisher depthPublisher_;
+        ros::Publisher pressPublisher_;
+        ros::Publisher tempPublisher_;
 
         std::thread readThread;
         std::thread sendID1Thread;
@@ -67,6 +69,8 @@ class ProviderDepthNode
         std::condition_variable id1_cond;
 
         std_msgs::Float32 depth_;
+        std_msgs::Float32 press_;
+        std_msgs::Float32 temp_;
 };
 
 }

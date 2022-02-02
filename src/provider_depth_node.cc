@@ -35,6 +35,8 @@ namespace provider_depth
         : nh_(_nh), configuration_(_nh), serialConnection_(configuration_.getTtyPort())
     {
         depthPublisher_ = nh_->advertise<std_msgs::Float32>("/provider_depth/depth", 100);
+        pressPublisher_ = nh_->advertise<std_msgs::Float32>("/provider_depth/press", 100);
+        tempPublisher_ = nh_->advertise<std_msgs::Float32>("/provider_depth/temp", 100);
         
         readThread = std::thread(std::bind(&ProviderDepthNode::readSerialDevice, this));
         sendID1Thread = std::thread(std::bind(&ProviderDepthNode::sendId1Register, this));
@@ -125,20 +127,16 @@ namespace provider_depth
                     std::getline(ss, tmp, ','); // M
 
                     std::getline(ss, tmp, ','); // Get the pressure
-
                     depth_.data = stof(tmp);
-
-                    depthPublisher_.publish(depth_);
+                    depthPublisher_.publish(press_);
 
 
 
                     std::getline(ss, tmp, ','); // B
 
                     std::getline(ss, tmp, ','); // Get the temperature
-
                     depth_.data = stof(tmp);
-
-                    depthPublisher_.publish(depth_);
+                    depthPublisher_.publish(temp__);
                 }
             }
             catch(...)
