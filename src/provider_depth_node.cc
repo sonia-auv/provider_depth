@@ -136,7 +136,7 @@ namespace provider_depth
 
                     std::getline(ss, tmp, ','); // Get the temperature
                     depth_.data = stof(tmp);
-                    depthPublisher_.publish(temp__);
+                    depthPublisher_.publish(temp_);
                 }
             }
             catch(...)
