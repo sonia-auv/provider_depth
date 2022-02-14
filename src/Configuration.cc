@@ -45,8 +45,6 @@ namespace provider_depth
         ROS_INFO("Deserialize params");
 
         FindParameter("/connection/tty_port", ttyPort);
-        FindParameter("/settings/role", role);
-        FindParameter("/settings/channel", channel);
 
         ROS_INFO("End deserialize params");
     }
