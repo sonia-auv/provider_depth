@@ -42,6 +42,7 @@ namespace provider_depth
         sendID1Thread = std::thread(std::bind(&ProviderDepthNode::sendId1Register, this));
 
         serialConnection_.flush();
+        tare_srv = nh_->advertiseService("/provider_depth/tare", &ProviderDepthNode::tare, this);
     }
 
     ProviderDepthNode::~ProviderDepthNode()
@@ -145,5 +146,14 @@ namespace provider_depth
             }
             
         }
+    }
+
+    bool ProviderDepthNode::tare(std_srvs::Empty::Request &tareRsq, std_srvs::Empty::Response &tareRsp)
+    {
+        serialConnection_.transmit("#tare\n");
+        ros::Duration(0.1).sleep();
+
+        ROS_INFO("Depth Sensor tare finished");
+        return true;
     }
 }

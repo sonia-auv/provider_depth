@@ -71,6 +71,9 @@ class ProviderDepthNode
         std_msgs::Float32 depth_;
         std_msgs::Float32 press_;
         std_msgs::Float32 temp_;
+
+        bool tare(std_srvs::Empty::Request &tareRsq, std_srvs::Empty::Response &tareRsp);
+        ros::ServiceServer tare_srv;
 };
 
 }
