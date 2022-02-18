@@ -33,6 +33,8 @@
 #include <string>
 #include <std_msgs/Float32.h>
 
+#include <std_srvs/Empty.h>
+
 #include "Configuration.h"
 #include "drivers/serial.h"
 
