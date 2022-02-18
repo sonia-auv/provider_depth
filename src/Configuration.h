@@ -41,8 +41,6 @@ namespace provider_depth
 
         std::string getTtyPort() const {return ttyPort;}
         std::string getSettingsFile() const {return settingsFile;}
-        std::string getRole() const {return role;}
-        std::string getChannel() const {return channel;}
 
     private:
 
@@ -50,8 +48,6 @@ namespace provider_depth
 
         std::string ttyPort;
         std::string settingsFile;
-        std::string role;
-        std::string channel;
 
         void Deserialize();
         void SetParameter();
