@@ -124,17 +124,14 @@ namespace provider_depth
                     depth_.data = stof(tmp);
                     depthPublisher_.publish(depth_);
 
-
-                    std::getline(ss, tmp, ','); // M
+                    std::getline(ss, tmp, ','); // skip M
 
                     std::getline(ss, tmp, ','); // Get the pressure
                     press_.data = stof(tmp);
                     pressPublisher_.publish(press_);
 
-
-
-                    std::getline(ss, tmp, ','); // B
-
+                    std::getline(ss, tmp, ','); // skip B
+                    
                     std::getline(ss, tmp, ','); // Get the temperature
                     temp_.data = stof(tmp);
                     tempPublisher_.publish(temp_);
