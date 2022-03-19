@@ -30,7 +30,7 @@ namespace provider_depth
 
     Configuration::Configuration(const ros::NodeHandlePtr &nh)
         : nh(nh),
-          ttyPort("/dev/ttyUSB0"), // "/dev/MODEM" for AUVs, debug only
+          ttyPort("/dev/ttyUSB0") // "/dev/MODEM" for AUVs, debug only
     {
         Deserialize();
     }
