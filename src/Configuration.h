@@ -40,21 +40,18 @@ namespace provider_depth
         ~Configuration();
 
         std::string getTtyPort() const {return ttyPort;}
-        std::string getSettingsFile() const {return settingsFile;}
 
     private:
 
         ros::NodeHandlePtr nh;
 
         std::string ttyPort;
-        std::string settingsFile;
 
         void Deserialize();
         void SetParameter();
 
         template <typename TType>
         void FindParameter(const std::string &paramName, TType &attribute);
-
 
         };
 }
