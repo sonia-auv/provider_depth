@@ -40,6 +40,9 @@ namespace provider_depth
     void Configuration::Deserialize() {
 
         ROS_INFO("Deserialize params");
+
+        FindParameter("/connection/tty_port", ttyPort);
+        
         ROS_INFO("End deserialize params");
     }
 
