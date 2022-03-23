@@ -35,11 +35,14 @@ namespace provider_depth
         : nh_(_nh), configuration_(_nh), serialConnection_(configuration_.getTtyPort())
     {
         depthPublisher_ = nh_->advertise<std_msgs::Float32>("/provider_depth/depth", 100);
+        pressPublisher_ = nh_->advertise<std_msgs::Float32>("/provider_depth/press", 100);
+        tempPublisher_ = nh_->advertise<std_msgs::Float32>("/provider_depth/temp", 100);
         
         readThread = std::thread(std::bind(&ProviderDepthNode::readSerialDevice, this));
         sendID1Thread = std::thread(std::bind(&ProviderDepthNode::sendId1Register, this));
 
         serialConnection_.flush();
+        tare_srv = nh_->advertiseService("/provider_depth/tare", &ProviderDepthNode::tare, this);
     }
 
     ProviderDepthNode::~ProviderDepthNode()
@@ -99,12 +102,13 @@ namespace provider_depth
 
     void ProviderDepthNode::sendId1Register()
     {
+        std::string tmp = "";
+        
         ROS_INFO_STREAM("Send ID1 Thread started");
 
         while(!ros::isShuttingDown())
         {
-            std::string tmp = "";
-
+            tmp = "";
             std::unique_lock<std::mutex> mlock(id1_mutex);
             id1_cond.wait(mlock);
 
@@ -120,7 +124,17 @@ namespace provider_depth
                     depth_.data = stof(tmp);
                     depthPublisher_.publish(depth_);
 
-                    // Add other values returned from the sensor
+                    std::getline(ss, tmp, ','); // skip M
+
+                    std::getline(ss, tmp, ','); // Get the pressure
+                    press_.data = stof(tmp);
+                    pressPublisher_.publish(press_);
+
+                    std::getline(ss, tmp, ','); // skip B
+                    
+                    std::getline(ss, tmp, ','); // Get the temperature
+                    temp_.data = stof(tmp);
+                    tempPublisher_.publish(temp_);
                 }
             }
             catch(...)
@@ -129,5 +143,14 @@ namespace provider_depth
             }
             
         }
+    }
+
+    bool ProviderDepthNode::tare(std_srvs::Empty::Request &tareRsq, std_srvs::Empty::Response &tareRsp)
+    {
+        serialConnection_.transmit("#tare\n");
+        ros::Duration(0.1).sleep();
+
+        ROS_INFO("Depth Sensor tare finished");
+        return true;
     }
 }

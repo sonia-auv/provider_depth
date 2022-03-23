@@ -30,10 +30,7 @@ namespace provider_depth
 
     Configuration::Configuration(const ros::NodeHandlePtr &nh)
         : nh(nh),
-          ttyPort("/dev/ttyUSB0"), // "/dev/MODEM" for AUVs, debug only
-          settingsFile("settings.txt"),
-          role("master"),
-          channel("4")
+          ttyPort("/dev/ttyUSB0") // "/dev/MODEM" for AUVs, debug only
     {
         Deserialize();
     }
@@ -45,9 +42,7 @@ namespace provider_depth
         ROS_INFO("Deserialize params");
 
         FindParameter("/connection/tty_port", ttyPort);
-        FindParameter("/settings/role", role);
-        FindParameter("/settings/channel", channel);
-
+        
         ROS_INFO("End deserialize params");
     }
 

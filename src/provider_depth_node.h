@@ -33,6 +33,8 @@
 #include <string>
 #include <std_msgs/Float32.h>
 
+#include <std_srvs/Empty.h>
+
 #include "Configuration.h"
 #include "drivers/serial.h"
 
@@ -59,6 +61,8 @@ class ProviderDepthNode
         Serial serialConnection_;
 
         ros::Publisher depthPublisher_;
+        ros::Publisher pressPublisher_;
+        ros::Publisher tempPublisher_;
 
         std::thread readThread;
         std::thread sendID1Thread;
@@ -67,6 +71,11 @@ class ProviderDepthNode
         std::condition_variable id1_cond;
 
         std_msgs::Float32 depth_;
+        std_msgs::Float32 press_;
+        std_msgs::Float32 temp_;
+
+        bool tare(std_srvs::Empty::Request &tareRsq, std_srvs::Empty::Response &tareRsp);
+        ros::ServiceServer tare_srv;
 };
 
 }
