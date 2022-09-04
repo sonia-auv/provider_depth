@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="2">
   <name>provider_depth</name>
-  <version>0.4.0</version>
+  <version>1.0.0</version>
   <description>The provider_depth package</description>
 
   <author>Francois Côté-Raiche</author>
