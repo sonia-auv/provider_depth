@@ -2,7 +2,7 @@
  * \file	main.cc
  * \author	Francois Côté-Raiche <francois.cote-raiche.1@ens.etsmtl.ca>
  * \date	05/10/2021
- * 
+ *
  * \copyright Copyright (c) 2021 S.O.N.I.A. All rights reserved.
  *
  * \section LICENSE
@@ -28,8 +28,8 @@
 
 int main(int argc, char **argv)
 {
-    ros::init(argc, argv, "provider_depth");
-    ros::NodeHandlePtr nh(new ros::NodeHandle("~"));
+    ros::init(argc, argv, "provider_depth");         // initialize ros with this name
+    ros::NodeHandlePtr nh(new ros::NodeHandle("~")); // Create Node
     provider_depth::ProviderDepthNode provider_depth_node{nh};
     provider_depth_node.Spin();
 

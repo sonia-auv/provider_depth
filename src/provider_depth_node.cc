@@ -25,12 +25,10 @@
 
 #include "provider_depth_node.h"
 
-#define BUFFER_SIZE 4096
+#define BUFFER_SIZE 4096 // FIXME: make constant
 
 namespace provider_depth
 {
-
-    //Node constructor
     ProviderDepthNode::ProviderDepthNode(const ros::NodeHandlePtr &_nh)
         : nh_(_nh), configuration_(_nh), serialConnection_(configuration_.getTtyPort())
     {
@@ -38,10 +36,14 @@ namespace provider_depth
         pressPublisher_ = nh_->advertise<std_msgs::Float32>("/provider_depth/press", 100);
         tempPublisher_ = nh_->advertise<std_msgs::Float32>("/provider_depth/temp", 100);
         
+        // Thread for Seral Device connection.
         readThread = std::thread(std::bind(&ProviderDepthNode::readSerialDevice, this));
+        // Thread for CheckSum function thingy.
         sendID1Thread = std::thread(std::bind(&ProviderDepthNode::sendId1Register, this));
 
         serialConnection_.flush();
+        
+        // Start host server.
         tare_srv = nh_->advertiseService("/provider_depth/tare", &ProviderDepthNode::tare, this);
     }
 
@@ -52,7 +54,8 @@ namespace provider_depth
 
     void ProviderDepthNode::Spin()
     {
-        ros::Rate r(100); // 100 Hz
+        // TODO: Make the 100 some kind of const or part of the ctor.
+        ros::Rate r(100); // 100 Hz 
 
         while(ros::ok())
         {
